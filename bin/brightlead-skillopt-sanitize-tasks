@@ -52,14 +52,18 @@ def _read_items(path: Path) -> list[dict[str, Any]]:
     if not stripped:
         return []
     if stripped[0] in "[{":
-        payload = json.loads(text)
-        if isinstance(payload, dict) and isinstance(payload.get("tasks"), list):
-            payload = payload["tasks"]
-        elif isinstance(payload, dict):
-            payload = [payload]
-        if not isinstance(payload, list):
-            raise SystemExit("input JSON must be an object, task payload, or array")
-        return [_ensure_object(item) for item in payload]
+        try:
+            payload = json.loads(text)
+        except json.JSONDecodeError:
+            payload = None
+        if payload is not None:
+            if isinstance(payload, dict) and isinstance(payload.get("tasks"), list):
+                payload = payload["tasks"]
+            elif isinstance(payload, dict):
+                payload = [payload]
+            if not isinstance(payload, list):
+                raise SystemExit("input JSON must be an object, task payload, or array")
+            return [_ensure_object(item) for item in payload]
 
     items = []
     for lineno, line in enumerate(text.splitlines(), 1):

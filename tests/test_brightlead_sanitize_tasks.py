@@ -77,6 +77,44 @@ class TestBrightLeadSanitizeTasks(unittest.TestCase):
             self.assertEqual(payload["tasks"][0]["project"], "[REDACTED_PATH]")
             self.assertIn("rule:no-live-write", payload["tasks"][0]["tags"])
 
+    def test_sanitize_tasks_accepts_multiple_jsonl_objects(self):
+        env = {**os.environ, "PYTHONNOUSERSITE": "1"}
+        with tempfile.TemporaryDirectory() as tmp:
+            src = os.path.join(tmp, "snippets.jsonl")
+            out = os.path.join(tmp, "tasks.json")
+            rows = [
+                {"intent": "Return train QA status", "reference": "QA PASS", "split": "train"},
+                {"intent": "Return val QA status", "reference": "QA PASS", "split": "val"},
+                {"intent": "Return test QA status", "reference": "QA PASS", "split": "test"},
+            ]
+            with open(src, "w", encoding="utf-8") as f:
+                for row in rows:
+                    f.write(json.dumps(row) + "\n")
+
+            proc = subprocess.run(
+                [
+                    SANITIZE_TASKS,
+                    src,
+                    out,
+                    "--project",
+                    tmp,
+                    "--target-skill-path",
+                    "skills/qa-output/SKILL.md",
+                ],
+                cwd=REPO,
+                env=env,
+                capture_output=True,
+                text=True,
+                timeout=60,
+            )
+
+            self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+            self.assertIn("wrote 3 tasks", proc.stdout)
+            with open(out, encoding="utf-8") as f:
+                payload = json.load(f)
+            self.assertEqual(len(payload["tasks"]), 3)
+            self.assertEqual({task["split"] for task in payload["tasks"]}, {"train", "val", "test"})
+
     def test_sanitize_tasks_can_mark_reviewed_after_human_review(self):
         env = {**os.environ, "PYTHONNOUSERSITE": "1"}
         with tempfile.TemporaryDirectory() as tmp:

@@ -1,5 +1,21 @@
 # BrightLead SkillOpt Pilot
 
+## Microsoft PR #144 Status
+
+PR #144 was closed on 2026-07-16 after Microsoft reviewed it and asked for a much narrower, provider-neutral upstream contribution.
+
+BrightLead's decision: do not keep pursuing the Microsoft upstream PR for now. Keep this branch as BrightLead-owned operations tooling in the BrightLead fork/workspace.
+
+The reviewed upstream feedback is still useful for BrightLead's own safety work:
+
+- Keep report-only behavior as the default.
+- Keep task files `reviewed: false` until a human has checked them.
+- Keep sanitizer and validator steps separate.
+- Keep adoption tests disposable until a specific live adoption batch is approved.
+- Be honest that privacy filtering is best-effort plus mandatory human review unless the code truly fails closed for every sensitive pattern.
+
+Do not push BrightLead-only wrappers, fixtures, paths, or business rules to Microsoft upstream unless a separate, narrow upstream contribution is explicitly approved later.
+
 Installed locally for internal research/ops use at `tools/skillopt/`.
 
 Source:
