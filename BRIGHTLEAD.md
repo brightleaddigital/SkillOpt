@@ -78,7 +78,7 @@ Run the broader BrightLead regression suite when checking guardrail coverage bef
 tools/skillopt/bin/brightlead-skillopt-regression-suite
 ```
 
-The suite runs reviewed mock fixtures for answer formatting, SI units, no-live-write closeouts, source-citation hygiene, and draft-first publication recovery. It writes `manifest.json` and `brightlead-skillopt-regression-suite.md`, and every fixture must stay report-only with `adopted: False`, an empty `staging_dir`, reviewed task files, and `n_sessions: 0`.
+The suite runs reviewed mock fixtures for answer formatting, SI units, no-live-write closeouts, source-citation hygiene, draft-first publication recovery, and local-offer draft-publish recovery. It writes `manifest.json` and `brightlead-skillopt-regression-suite.md`, and every fixture must stay report-only with `adopted: False`, an empty `staging_dir`, reviewed task files, and `n_sessions: 0`.
 
 Create a redacted task-file draft from reviewed local snippets before any real-backend replay:
 
@@ -146,3 +146,11 @@ PYTHONNOUSERSITE=1 python3 -m unittest tests.test_brightlead_lol010_regression
 
 This fixture is BrightLead-local but sanitized enough to serve as an upstream issue/PR reference. It verifies two behaviors: SkillOpt can learn a missing draft-then-publish recovery rule from a pre-rule skill, and it no-ops once that recovery rule already exists. Keep it reviewed/manual only; it does not adopt skills or touch WordPress.
 
+Local Offer draft-publish hard fixture:
+
+```sh
+cd tools/skillopt
+bin/brightlead-skillopt-pilot-dry-run --fixture local-offer-draft-publish
+```
+
+This report-only fixture adds a harder Local Offer Library publication QA example. It proves SkillOpt can propose a same-offer draft-first recovery rule from reviewed sanitized tasks, while keeping `adopted: False`, `staging_dir` empty, and `n_sessions: 0`. Validate the generated task file before using it in any review packet.

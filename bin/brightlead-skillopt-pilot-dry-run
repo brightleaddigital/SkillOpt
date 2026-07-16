@@ -19,7 +19,7 @@ while [[ $# -gt 0 ]]; do
       ;;
     --help|-h)
       cat <<'EOF'
-Usage: brightlead-skillopt-pilot-dry-run [--fixture wrap-answer|brightlead-qa|brightlead-known-gap|brightlead-no-live-write|brightlead-source-citation|brightlead-draft-first] [OUT_DIR]
+Usage: brightlead-skillopt-pilot-dry-run [--fixture wrap-answer|brightlead-qa|brightlead-known-gap|brightlead-no-live-write|brightlead-source-citation|brightlead-draft-first|local-offer-draft-publish] [OUT_DIR]
 
 Runs a reviewed, report-only SkillOpt dry run. No skill edits are adopted.
 EOF
@@ -71,7 +71,7 @@ case "$FIXTURE" in
     cat >"$TASKS_FILE" <<EOF
 {
   "format": "skillopt_sleep.tasks.v1",
-  "project": "$PILOT_PROJECT",
+  "project": "pilot-project",
   "transcript_source": "brightlead-reviewed-fixture",
   "n_sessions": 0,
   "target_skill_path": "skills/answer-format/SKILL.md",
@@ -79,7 +79,7 @@ case "$FIXTURE" in
   "tasks": [
     {
       "id": "wrap_train",
-      "project": "$PILOT_PROJECT",
+      "project": "pilot-project",
       "intent": "Return the final answer in answer tags.",
       "reference_kind": "exact",
       "reference": "42",
@@ -89,7 +89,7 @@ case "$FIXTURE" in
     },
     {
       "id": "wrap_val",
-      "project": "$PILOT_PROJECT",
+      "project": "pilot-project",
       "intent": "Return the held-out final answer in answer tags.",
       "reference_kind": "exact",
       "reference": "blue",
@@ -106,7 +106,7 @@ EOF
     cat >"$TASKS_FILE" <<EOF
 {
   "format": "skillopt_sleep.tasks.v1",
-  "project": "$PILOT_PROJECT",
+  "project": "pilot-project",
   "transcript_source": "brightlead-sanitized-review-fixture",
   "n_sessions": 0,
   "target_skill_path": "skills/qa-output/SKILL.md",
@@ -114,7 +114,7 @@ EOF
   "tasks": [
     {
       "id": "qa_wrap_status_train",
-      "project": "$PILOT_PROJECT",
+      "project": "pilot-project",
       "intent": "Return a short QA status result in the required answer wrapper.",
       "context_excerpt": "A local-only QA check passed. No production write, private transcript harvest, or external publish occurred.",
       "reference_kind": "exact",
@@ -125,7 +125,7 @@ EOF
     },
     {
       "id": "qa_wrap_release_val",
-      "project": "$PILOT_PROJECT",
+      "project": "pilot-project",
       "intent": "Return a held-out release QA result in the required answer wrapper.",
       "context_excerpt": "A review bundle passed with adopted false and empty staging output.",
       "reference_kind": "exact",
@@ -136,7 +136,7 @@ EOF
     },
     {
       "id": "qa_wrap_guardrail_test",
-      "project": "$PILOT_PROJECT",
+      "project": "pilot-project",
       "intent": "Return a final guardrail QA result in the required answer wrapper.",
       "context_excerpt": "The pilot must stay report-only unless a later adoption batch is approved.",
       "reference_kind": "exact",
@@ -154,7 +154,7 @@ EOF
     cat >"$TASKS_FILE" <<EOF
 {
   "format": "skillopt_sleep.tasks.v1",
-  "project": "$PILOT_PROJECT",
+  "project": "pilot-project",
   "transcript_source": "brightlead-no-live-write-review-fixture",
   "n_sessions": 0,
   "target_skill_path": "skills/qa-output/SKILL.md",
@@ -162,7 +162,7 @@ EOF
   "tasks": [
     {
       "id": "qa_no_live_write_train",
-      "project": "$PILOT_PROJECT",
+      "project": "pilot-project",
       "intent": "Return the reviewed operational closeout with live-write guardrails stated.",
       "context_excerpt": "The approved batch was local-only and produced a report. It must not claim a publish, push, external service call, or production action.",
       "reference_kind": "exact",
@@ -173,7 +173,7 @@ EOF
     },
     {
       "id": "qa_no_live_write_val",
-      "project": "$PILOT_PROJECT",
+      "project": "pilot-project",
       "intent": "Return the held-out closeout sentence for a report-only QA batch.",
       "context_excerpt": "The run stayed inside local runtime evidence and did not touch WordPress or GitHub.",
       "reference_kind": "exact",
@@ -184,7 +184,7 @@ EOF
     },
     {
       "id": "qa_no_live_write_test",
-      "project": "$PILOT_PROJECT",
+      "project": "pilot-project",
       "intent": "Return the final no-live-write status for a sanitized SkillOpt pilot.",
       "context_excerpt": "The pilot used mock backend, reviewed local tasks, and no adopted edits.",
       "reference_kind": "exact",
@@ -202,7 +202,7 @@ EOF
     cat >"$TASKS_FILE" <<EOF
 {
   "format": "skillopt_sleep.tasks.v1",
-  "project": "$PILOT_PROJECT",
+  "project": "pilot-project",
   "transcript_source": "brightlead-source-citation-review-fixture",
   "n_sessions": 0,
   "target_skill_path": "skills/qa-output/SKILL.md",
@@ -210,7 +210,7 @@ EOF
   "tasks": [
     {
       "id": "qa_source_citation_train",
-      "project": "$PILOT_PROJECT",
+      "project": "pilot-project",
       "intent": "Return source-citation QA status before approving a research output.",
       "context_excerpt": "The research packet includes public sources, but the reviewer needs missing/private/unverified evidence called out.",
       "reference_kind": "exact",
@@ -221,7 +221,7 @@ EOF
     },
     {
       "id": "qa_source_citation_val",
-      "project": "$PILOT_PROJECT",
+      "project": "pilot-project",
       "intent": "Return held-out source hygiene status for a profile draft.",
       "context_excerpt": "A draft cites source URLs but must separate public evidence from internal notes.",
       "reference_kind": "exact",
@@ -232,7 +232,7 @@ EOF
     },
     {
       "id": "qa_source_citation_test",
-      "project": "$PILOT_PROJECT",
+      "project": "pilot-project",
       "intent": "Return final source hygiene status for a sanitized handoff.",
       "context_excerpt": "The handoff must not leak private source packets or claim evidence that was not verified.",
       "reference_kind": "exact",
@@ -250,7 +250,7 @@ EOF
     cat >"$TASKS_FILE" <<EOF
 {
   "format": "skillopt_sleep.tasks.v1",
-  "project": "$PILOT_PROJECT",
+  "project": "pilot-project",
   "transcript_source": "brightlead-draft-first-review-fixture",
   "n_sessions": 0,
   "target_skill_path": "skills/qa-output/SKILL.md",
@@ -258,7 +258,7 @@ EOF
   "tasks": [
     {
       "id": "qa_draft_first_train",
-      "project": "$PILOT_PROJECT",
+      "project": "pilot-project",
       "intent": "Return draft-first recovery QA status for an approved publishing batch.",
       "context_excerpt": "The approved item was created as a draft first, then the same approved batch verified that same item ID and avoided unrelated writes.",
       "reference_kind": "exact",
@@ -269,7 +269,7 @@ EOF
     },
     {
       "id": "qa_draft_first_val",
-      "project": "$PILOT_PROJECT",
+      "project": "pilot-project",
       "intent": "Return held-out draft-first recovery status for publication QA.",
       "context_excerpt": "The final evidence should not fail solely on a temporary draft state if same-item recovery was verified.",
       "reference_kind": "exact",
@@ -280,7 +280,7 @@ EOF
     },
     {
       "id": "qa_draft_first_test",
-      "project": "$PILOT_PROJECT",
+      "project": "pilot-project",
       "intent": "Return final draft-first recovery guardrail for a QA closeout.",
       "context_excerpt": "Rollback evidence and final verification exist, but unrelated changes must still be ruled out.",
       "reference_kind": "exact",
@@ -293,12 +293,60 @@ EOF
 }
 EOF
     ;;
+  local-offer-draft-publish)
+    TARGET_SKILL_PATH="skills/qa-output/SKILL.md"
+    cat >"$TASKS_FILE" <<EOF
+{
+  "format": "skillopt_sleep.tasks.v1",
+  "project": "pilot-project",
+  "transcript_source": "local-offer-draft-publish-review-fixture",
+  "n_sessions": 0,
+  "target_skill_path": "skills/qa-output/SKILL.md",
+  "reviewed": true,
+  "tasks": [
+    {
+      "id": "lol_draft_publish_train",
+      "project": "pilot-project",
+      "intent": "Return Local Offer Library publication QA status for a draft-first recovery batch.",
+      "context_excerpt": "The approved offer was created as draft first, then the same approved batch verified and published that same offer. Final checks show expected slug, media, taxonomy, body markers, rollback snapshots, public smoke pass, and no unrelated writes.",
+      "reference_kind": "exact",
+      "reference": "Local Offer draft-first recovery is clean only when the same offer ID is published in the same approved batch, final slug/media/taxonomy/body checks pass, rollback snapshots exist, and no unrelated changes occurred.",
+      "tags": ["local-offer-publication-qa", "publication-qa", "rule:local-offer-draft-publish-recovery"],
+      "split": "train",
+      "origin": "real"
+    },
+    {
+      "id": "lol_draft_publish_val",
+      "project": "pilot-project",
+      "intent": "Return held-out Local Offer Library recovery QA status.",
+      "context_excerpt": "A temporary draft state should not fail the whole batch if same-offer final publish evidence and rollback evidence are present, and unrelated writes are ruled out.",
+      "reference_kind": "exact",
+      "reference": "Local Offer draft-first recovery is clean only when the same offer ID is published in the same approved batch, final slug/media/taxonomy/body checks pass, rollback snapshots exist, and no unrelated changes occurred.",
+      "tags": ["local-offer-publication-qa", "publication-qa", "rule:local-offer-draft-publish-recovery"],
+      "split": "val",
+      "origin": "real"
+    },
+    {
+      "id": "lol_draft_publish_test",
+      "project": "pilot-project",
+      "intent": "Return final Local Offer Library publication recovery closeout status.",
+      "context_excerpt": "The closeout must confirm same-offer recovery, final checks, rollback snapshots, smoke checks, and no unrelated changes before calling the batch clean.",
+      "reference_kind": "exact",
+      "reference": "Local Offer draft-first recovery is clean only when the same offer ID is published in the same approved batch, final slug/media/taxonomy/body checks pass, rollback snapshots exist, and no unrelated changes occurred.",
+      "tags": ["local-offer-publication-qa", "publication-qa", "rule:local-offer-draft-publish-recovery"],
+      "split": "test",
+      "origin": "real"
+    }
+  ]
+}
+EOF
+    ;;
   brightlead-known-gap)
     TARGET_SKILL_PATH="skills/qa-output/SKILL.md"
     cat >"$TASKS_FILE" <<EOF
 {
   "format": "skillopt_sleep.tasks.v1",
-  "project": "$PILOT_PROJECT",
+  "project": "pilot-project",
   "transcript_source": "brightlead-known-gap-review-fixture",
   "n_sessions": 0,
   "target_skill_path": "skills/qa-output/SKILL.md",
@@ -306,7 +354,7 @@ EOF
   "tasks": [
     {
       "id": "qa_units_train",
-      "project": "$PILOT_PROJECT",
+      "project": "pilot-project",
       "intent": "Return the reviewed page-speed threshold with the required SI unit.",
       "context_excerpt": "The local QA task is checking whether numeric results include standard units.",
       "reference_kind": "exact",
@@ -317,7 +365,7 @@ EOF
     },
     {
       "id": "qa_units_val",
-      "project": "$PILOT_PROJECT",
+      "project": "pilot-project",
       "intent": "Return the held-out response-time threshold with the required SI unit.",
       "context_excerpt": "The review bundle should show exact numeric thresholds with standard units.",
       "reference_kind": "exact",
@@ -328,7 +376,7 @@ EOF
     },
     {
       "id": "qa_units_test",
-      "project": "$PILOT_PROJECT",
+      "project": "pilot-project",
       "intent": "Return the final file-size guardrail with the required SI unit.",
       "context_excerpt": "The pilot did not harvest transcripts, push to GitHub, call external services, or write to WordPress.",
       "reference_kind": "exact",

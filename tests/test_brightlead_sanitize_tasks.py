@@ -290,6 +290,7 @@ class TestBrightLeadRegressionSuite(unittest.TestCase):
             self.assertIn("brightlead-no-live-write", proc.stdout)
             self.assertIn("brightlead-source-citation", proc.stdout)
             self.assertIn("brightlead-draft-first", proc.stdout)
+            self.assertIn("local-offer-draft-publish", proc.stdout)
 
             report_path = os.path.join(tmp, "brightlead-skillopt-regression-suite.md")
             manifest_path = os.path.join(tmp, "manifest.json")
@@ -298,7 +299,7 @@ class TestBrightLeadRegressionSuite(unittest.TestCase):
             with open(manifest_path, encoding="utf-8") as f:
                 manifest = json.load(f)
             self.assertEqual(manifest["status"], "PASS")
-            self.assertEqual(len(manifest["fixtures"]), 5)
+            self.assertEqual(len(manifest["fixtures"]), 6)
             fixtures = {item["fixture"]: item for item in manifest["fixtures"]}
             for name in (
                 "brightlead-qa",
@@ -306,6 +307,7 @@ class TestBrightLeadRegressionSuite(unittest.TestCase):
                 "brightlead-no-live-write",
                 "brightlead-source-citation",
                 "brightlead-draft-first",
+                "local-offer-draft-publish",
             ):
                 self.assertEqual(fixtures[name]["status"], "PASS")
                 self.assertIs(fixtures[name]["adopted"], False)

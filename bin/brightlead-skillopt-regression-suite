@@ -16,6 +16,7 @@ fixtures=(
   brightlead-no-live-write
   brightlead-source-citation
   brightlead-draft-first
+  local-offer-draft-publish
 )
 
 mkdir -p "$OUT_DIR"
@@ -95,7 +96,7 @@ with open(report_path, "w", encoding="utf-8") as f:
     f.write(
         "This suite reruns the reviewed, sanitized BrightLead mock fixtures for "
         "answer formatting, SI units, no-live-write closeouts, source-citation "
-        "hygiene, and draft-first publication recovery. Each fixture must improve "
+        "hygiene, draft-first publication recovery, and local-offer draft-publish recovery. Each fixture must improve "
         "under the mock backend while staying report-only: adopted false, empty "
         "staging output, zero harvested sessions, and reviewed task files. It does "
         "not adopt live skills, harvest private transcripts, contact external "
